@@ -17,11 +17,15 @@ export async function uploadToS3({
   });
   formData.append('file', fileContents); // The file has be the last element
 
-  const response = await axios.post(presignedPostUrl.url, formData, {
+  await axios.post(presignedPostUrl.url, formData, {
     headers: {'Content-Type': 'multipart/form-data'},
   });
 
-  return presignedPostUrl.filePath;
+  // return presignedPostUrl.filePath;
+  const urlImage = await axios.get(
+    `${API_BASE_URL}/generate-url?key=${presignedPostUrl.filePath}`,
+  );
+  return urlImage;
 }
 
 type PresignedPostUrlResponse = {
